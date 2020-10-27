@@ -1,0 +1,16 @@
+# Ignore PyCharm files
+.idea/
+
+# Ignore byte-compiled files
+*.pyc
+*pycache*
+
+# Ignore vim files
+*.swp
+
+# Ignore all files for test
+foobar/
+*foo*
+*bar*
+mascot.py
+
