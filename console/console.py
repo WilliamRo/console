@@ -46,10 +46,19 @@ class Console(object):
   WARNING_PROMPT = '!!'
   TEXT_WIDTH = 79
 
-  def __init__(self, buffer_size=0):
+  def __init__(self, buffer_size=0, fancy_text=True):
+    """Initiate a console.
+
+    :param buffer_size: buffer size
+    :param fancy_text: whether to allow fancy text. Notice that if this value
+                       is set to False, all consoles will not be able to produce
+                       fancy text.
+    """
     # Public variables
     self.buffer_size = buffer_size
     assert isinstance(buffer_size, int) and buffer_size >= 0
+    # Turn off fancy text forever if fancy_text is set to False
+    if not fancy_text: self.disable_fancy_text()
     # Private variables
     self._buffer = []
     self._title = None
@@ -79,6 +88,14 @@ class Console(object):
   # endregion: Private Methods
   
   # region: Public Methods
+
+  @staticmethod
+  def disable_fancy_text():
+    """Disable fancy text. Notice that this will disable fancy text for all
+       instances of Console.
+    """
+    printer.fancy_text = False
+
 
   @auto_clear
   def write_line(self, text, color=None, highlight=None, attributes=None,
@@ -176,20 +193,22 @@ class Console(object):
 
   def show_info(self, text, color=None, highlight=None, attributes=None):
     """Show information using self.show_status"""
-    self.show_status(text, color, highlight, attributes, self.INFO_PROMPT)
+    return self.show_status(
+      text, color, highlight, attributes, self.INFO_PROMPT)
 
 
   def supplement(self, text, color=None, highlight=None, attributes=None,
                  level=1):
     """Show supplement using self.show_status"""
     assert isinstance(level, int) and level > 0
-    self.show_status(text, color, highlight, attributes,
-                     self.SUPPLEMENT_PROMPT * level)
+    return self.show_status(
+      text, color, highlight, attributes, self.SUPPLEMENT_PROMPT * level)
 
 
   def warning(self, text, color='red', highlight=None, attributes=None):
     """Show supplement using self.show_status"""
-    self.show_status(text, color, highlight, attributes, self.WARNING_PROMPT)
+    return self.show_status(
+      text, color, highlight, attributes, self.WARNING_PROMPT)
 
 
   def print_progress(self, index=None, total=None, start_time=None,

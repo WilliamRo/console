@@ -64,6 +64,8 @@ from sys import stdout
 
 __all__ = ['parse', 'write_line', 'write', 'clear_line']
 
+fancy_text = True
+
 
 # region: Code from termcolor.py
 
@@ -135,7 +137,7 @@ def colored(text, color=None, on_color=None, attrs=None):
         colored('Hello, World!', 'red', 'on_grey', ['blue', 'blink'])
         colored('Hello, World!', 'green')
     """
-    if os.getenv('ANSI_COLORS_DISABLED') is None:
+    if os.getenv('ANSI_COLORS_DISABLED') is None and fancy_text:
         fmt_str = '\033[%dm%s'
         if color is not None:
             text = fmt_str % (COLORS[color], text)
@@ -245,6 +247,8 @@ def parse(text, lead='#'):
     rendered_text = rendered_text.replace(unit, ren)
     raw_text = raw_text.replace(unit, raw)
 
+  # Force to display plain text if fancy text is disabled
+  if not fancy_text: rendered_text = raw_text
   return rendered_text, raw_text
 
 
