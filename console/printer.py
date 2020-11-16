@@ -137,6 +137,7 @@ def colored(text, color=None, on_color=None, attrs=None):
         colored('Hello, World!', 'red', 'on_grey', ['blue', 'blink'])
         colored('Hello, World!', 'green')
     """
+    if all([color is None, on_color is None, attrs is None]): return text
     if os.getenv('ANSI_COLORS_DISABLED') is None and fancy_text:
         fmt_str = '\033[%dm%s'
         if color is not None:

@@ -1,22 +1,26 @@
 import setuptools
 
 
+# Specify version
+VERSION = '1.0.3'
+
+
+# Run setup
 def readme():
   with open('README.md', 'r') as f:
     return f.read()
 
-
 setuptools.setup(
   name='roma-console',
   packages=setuptools.find_packages(),
-  version='1.0.2',
+  version=VERSION,
   description='Utilities for print fancy text in terminal.',
   long_description=readme(),
   long_description_content_type='text/markdown',
   author='William Ro',
   author_email='willi4m@zju.edu.cn',
   url='https://github.com/WilliamRo/console',
-  download_url='https://github.com/WilliamRo/console/tarball/v1.0.1',
+  download_url='https://github.com/WilliamRo/console/tarball/v' + VERSION,
   license='Apache-2.0',
   keywords=['console', 'terminal', 'color'],
   classifiers=[
