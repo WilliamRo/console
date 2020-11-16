@@ -15,6 +15,7 @@
 """A class that provides utilities to show information in terminal.
 """
 import logging
+import warnings
 from . import printer
 from functools import wraps
 
@@ -88,14 +89,6 @@ class Console(object):
   # endregion: Private Methods
   
   # region: Public Methods
-
-  @staticmethod
-  def disable_fancy_text():
-    """Disable fancy text. Notice that this will disable fancy text for all
-       instances of Console.
-    """
-    printer.fancy_text = False
-
 
   @auto_clear
   def write_line(self, text, color=None, highlight=None, attributes=None,
@@ -225,15 +218,29 @@ class Console(object):
     # This method does not need to be decorated due to the line below
     self._last_func_called = self.print_progress
 
+  # endregion: Public Methods
+
+  # region: Static Methods
 
   @staticmethod
   def clear_line():
     """Clear a line in which current cursor is positioned."""
     printer.clear_line(Console.TEXT_WIDTH)
 
-  # endregion: Public Methods
 
-  # region: Static Methods
+  @staticmethod
+  def disable_fancy_text():
+    """Disable fancy text. Notice that this will disable fancy text for all
+       instances of Console.
+    """
+    printer.fancy_text = False
+
+
+  @staticmethod
+  def disable_future_warnings():
+    """Suppress the annoying future warnings for good."""
+    warnings.simplefilter(action='ignore', category=FutureWarning)
+
 
   @staticmethod
   def disable_logging(pkg_name):
