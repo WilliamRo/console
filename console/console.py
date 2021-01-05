@@ -221,6 +221,16 @@ class Console(object):
   # endregion: Public Methods
 
   # region: Static Methods
+  
+  @staticmethod
+  def fancify(text, *args):
+    """Wrap raw text in the format that can be parsed by printer (BETA)"""
+    result = '#{' + text + '}'
+    for arg in args:
+      assert isinstance(arg, str)
+      result += '{' + arg + '}'
+    return result
+
 
   @staticmethod
   def clear_line():
