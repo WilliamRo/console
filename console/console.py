@@ -15,6 +15,7 @@
 """A class that provides utilities to show information in terminal.
 """
 import logging
+import time
 import warnings
 from . import printer
 from functools import wraps
@@ -38,7 +39,7 @@ def auto_clear(func):
 
 class Console(object):
 
-  __VERSION__ = (1, 0, 0)
+  __VERSION__ = (1, 0, 1)
 
   DEFAULT_TITLE = 'main'
   DEFAULT_PROMPT = '>>'
@@ -64,6 +65,7 @@ class Console(object):
     self._buffer = []
     self._title = None
     self._last_func_called = None
+    self._tic = None
 
   # region: Properties
 
@@ -204,17 +206,15 @@ class Console(object):
       text, color, highlight, attributes, self.WARNING_PROMPT)
 
 
-  def print_progress(self, index=None, total=None, start_time=None,
-                     progress=None):
+  def print_progress(self, index=None, total=None, progress=None):
     """Show progress bar using printer.print_progress.
 
     :param index: positive scalar, indicating current working progress
     :param total: positive scalar, indicating the scale of total work
-    :param start_time: if provided, ETA will be displayed to the right of
-                        the progress bar
     :param progress: if provided, 'index' and 'total' will be ignored.
     """
-    printer.print_progress(index, total, start_time, progress)
+    if index == 0: self._tic = time.time()
+    printer.print_progress(index, total, self._tic, progress)
     # This method does not need to be decorated due to the line below
     self._last_func_called = self.print_progress
 
