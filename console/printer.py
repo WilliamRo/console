@@ -120,6 +120,8 @@ COLORS = dict(
 
 RESET = '\033[0m'
 
+_BUFFER = {}
+
 
 def colored(text, color=None, on_color=None, attrs=None):
     """Colorize text.
@@ -305,6 +307,12 @@ def print_progress(index=None, total=None, start_time=None, progress=None,
   :param progress: if provided, 'index' and 'total' will be ignored.
   :param bar_width: width of progress bar, 65 by default
   """
+  if all([index is None, total is None, progress is None]):
+    if 'progress' in _BUFFER:
+      stdout.write(_BUFFER['progress'])
+      stdout.flush()
+      return
+
   # Calculate progress if not provided
   if progress is None:
     if index is None or total is None:
@@ -326,8 +334,11 @@ def print_progress(index=None, total=None, start_time=None, progress=None,
   right = bar_width - left
   mid = '=' if progress == 1 else '>'
   clear_line()
-  stdout.write('[%s%s%s] %s' %
-               ('=' * left, mid, ' ' * right, tail))
+
+  progress_str = '[%s%s%s] %s' % ('=' * left, mid, ' ' * right, tail)
+  _BUFFER['progress'] = progress_str
+
+  stdout.write(progress_str)
   stdout.flush()
 
 
