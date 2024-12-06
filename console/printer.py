@@ -324,8 +324,24 @@ def print_progress(index=None, total=None, start_time=None, progress=None,
   # Generate tail
   if start_time is not None:
     duration = time.time() - start_time
+
+    # Calculate eta in seconds
     eta = duration / max(progress, 1e-7) * (1 - progress)
-    tail = "ETA: {:.0f}s".format(eta)
+
+    # Convert eta to days-hours-seconds format adaptively
+    eta_str = ''
+    if eta > 24 * 3600:
+      eta_str += '{:.0f}d'.format(eta // (24 * 3600))
+      eta %= 24 * 3600
+    if eta > 3600:
+      eta_str += '{:.0f}h'.format(eta // 3600)
+      eta %= 3600
+    if eta > 60:
+      eta_str += '{:.0f}m'.format(eta // 60)
+      eta %= 60
+    eta_str += '{:.0f}s'.format(eta)
+
+    tail = "ETA: {}".format(eta_str)
   else:
     tail = "{:.0f}%".format(100 * progress)
 
